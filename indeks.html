@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menjelajahi Dunia Virus - SMAN 46 Maluku Tengah</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Three.js for 3D Virus Visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            800: '#0B192C',
+                            900: '#030712',
+                        },
+                        bio: {
+                            cyan: '#00F0FF',
+                            blue: '#1E40AF',
+                            teal: '#0D9488',
+                            green: '#10B981',
+                            purple: '#8B5CF6',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #060d19;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(0, 240, 255, 0.4);
+            transform: translateY(-2px);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #0D9488;
+            border-radius: 4px;
+        }
+        .pulse-glow {
+            animation: pulseGlow 3s infinite ease-in-out;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { filter: drop-shadow(0 0 15px rgba(0, 240, 255, 0.4)); }
+            50% { filter: drop-shadow(0 0 25px rgba(139, 92, 246, 0.6)); }
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #00F0FF 0%, #3B82F6 50%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between custom-scrollbar">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateTo('home')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30">
+                    <i class="fa-solid font-bold fa-virus text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-wide text-white leading-tight">MENJELAJAHI VIRUS</h1>
+                    <p class="text-xs text-cyan-400 font-medium">SMA Negeri 46 Maluku Tengah</p>
+                </div>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex space-x-1 lg:space-x-2">
+                <button onclick="navigateTo('home')" class="nav-btn px-3 py-1.5 rounded-lg text-xs lg:text-sm font-medium transition hover:bg-slate-800 text-slate-300 hover:text-cyan-400 active-nav" id="nav-home">
+                    <i class="fa-solid fa-house mr-1.5"></i>Beranda
+                </button>
+                <button onclick="navigateTo('tujuan')" class="nav-btn px-3 py-1.5 rounded-lg text-xs lg:text-sm font-medium transition hover:bg-slate-800 text-slate-300 hover:text-cyan-400" id="nav-tujuan">
+                    <i class="fa-solid fa-bullseye mr-1.5"></i>Tujuan
+                </button>
+                <button onclick="navigateTo('pengantar')" class="nav-btn px-3 py-1.5 rounded-lg text-xs lg:text-sm font-medium transition hover:bg-slate-800 text-slate-300 hover:text-cyan-400" id="nav-pengantar">
+                    <i class="fa-solid fa-book-open mr-1.5"></i>Pengantar
+                </button>
+                <button onclick="navigateTo('struktur')" class="nav-btn px-3 py-1.5 rounded-lg text-xs lg:text-sm font-medium transition hover:bg-slate-800 text-slate-300 hover:text-cyan-400" id="nav-struktur">
+                    <i class="fa-solid fa-dna mr-1.5"></i>Struktur
+                </button>
+                <button onclick="navigateTo('reproduksi')" class="nav-btn px-3 py-1.5 rounded-lg text-xs lg:text-sm font-medium transition hover:bg-slate-800 text-slate-300 hover:text-cyan-400" id="nav-reproduksi">
+                    <i class="fa-solid fa-arrows-spin mr-1.5"></i>Reproduksi
+                </button>
+                <button onclick="navigateTo('peranan')" class="nav-btn px-3 py-1.5 rounded-lg text-xs lg:text-sm font-medium transition hover:bg-slate-800 text-slate-300 hover:text-cyan-400" id="nav-peranan">
+                    <i class="fa-solid fa-notes-medical mr-1.5"></i>Peranan
+                </button>
+                <button onclick="navigateTo('aktivitas')" class="nav-btn px-3 py-1.5 rounded-lg text-xs lg:text-sm font-medium transition hover:bg-slate-800 text-slate-300 hover:text-cyan-400" id="nav-aktivitas">
+                    <i class="fa-solid fa-gamepad mr-1.5"></i>Aktivitas
+                </button>
+                <button onclick="navigateTo('kuis')" class="nav-btn px-3 py-1.5 rounded-lg text-xs lg:text-sm font-medium transition hover:bg-slate-800 text-slate-300 hover:text-cyan-400" id="nav-kuis">
+                    <i class="fa-solid fa-clipboard-check mr-1.5"></i>Kuis
+                </button>
+                <button onclick="navigateTo('refleksi')" class="nav-btn px-3 py-1.5 rounded-lg text-xs lg:text-sm font-medium transition hover:bg-slate-800 text-slate-300 hover:text-cyan-400" id="nav-refleksi">
+                    <i class="fa-solid fa-brain mr-1.5"></i>Refleksi
+                </button>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden text-slate-300 hover:text-white p-2">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-panel border-b border-slate-800 px-4 pt-2 pb-4 space-y-1">
+            <button onclick="navigateTo('home')" class="w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-800 hover:text-cyan-400"><i class="fa-solid fa-house w-6"></i>Beranda</button>
+            <button onclick="navigateTo('tujuan')" class="w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-800 hover:text-cyan-400"><i class="fa-solid fa-bullseye w-6"></i>Tujuan Pembelajaran</button>
+            <button onclick="navigateTo('pengantar')" class="w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-800 hover:text-cyan-400"><i class="fa-solid fa-book-open w-6"></i>Pengantar Virus</button>
+            <button onclick="navigateTo('struktur')" class="w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-800 hover:text-cyan-400"><i class="fa-solid fa-dna w-6"></i>Struktur & Bentuk</button>
+            <button onclick="navigateTo('reproduksi')" class="w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-800 hover:text-cyan-400"><i class="fa-solid fa-arrows-spin w-6"></i>Simulasi Reproduksi</button>
+            <button onclick="navigateTo('peranan')" class="w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-800 hover:text-cyan-400"><i class="fa-solid fa-notes-medical w-6"></i>Peranan Virus</button>
+            <button onclick="navigateTo('aktivitas')" class="w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-800 hover:text-cyan-400"><i class="fa-solid fa-gamepad w-6"></i>Aktivitas Interaktif</button>
+            <button onclick="navigateTo('kuis')" class="w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-800 hover:text-cyan-400"><i class="fa-solid fa-clipboard-check w-6"></i>Kuis & Evaluasi</button>
+            <button onclick="navigateTo('refleksi')" class="w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-800 hover:text-cyan-400"><i class="fa-solid fa-brain w-6"></i>Refleksi</button>
+        </div>
+    </header>
+
+    <!-- PROGRESS BAR -->
+    <div class="w-full bg-slate-900 h-1.5 relative overflow-hidden">
+        <div id="progress-bar" class="bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 h-full w-12 transition-all duration-500"></div>
+    </div>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+
+        <!-- 1. HOME SECTION -->
+        <section id="sec-home" class="content-section flex flex-col lg:flex-row items-center justify-between gap-8 py-8">
+            <div class="w-full lg:w-1/2 space-y-6">
+                <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-500/30 text-cyan-400 text-xs font-semibold tracking-wider uppercase">
+                    <i class="fa-solid fa-microscope text-sm"></i>
+                    <span>Media Digital Biologi Kelas X</span>
+                </div>
+                
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+                    <span class="gradient-text">MENJELAJAHI DUNIA VIRUS</span>
+                </h1>
+                
+                <p class="text-slate-300 text-base sm:text-lg font-light leading-relaxed">
+                    Eksplorasi interaktif mengenai mikroorganisme tak kasat mata, struktur kompleks, cara bereproduksi, hingga peranannya dalam kehidupan manusia.
+                </p>
+
+                <div class="p-4 rounded-xl glass-card border-l-4 border-l-cyan-500 space-y-1">
+                    <p class="text-xs text-slate-400 font-medium uppercase tracking-wider">Satuan Pendidikan</p>
+                    <p class="text-sm font-semibold text-white">SMA Negeri 46 Maluku Tengah</p>
+                    <p class="text-xs text-cyan-300">Mata Pelajaran: Biologi | Sasaran: Peserta Didik Kelas X</p>
+                </div>
+
+                <div class="pt-2 flex flex-wrap gap-4">
+                    <button onclick="navigateTo('tujuan')" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold text-base shadow-lg shadow-cyan-500/25 transition flex items-center space-x-2">
+                        <span>MULAI BELAJAR</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <button onclick="navigateTo('kuis')" class="px-6 py-3.5 rounded-xl glass-card hover:bg-slate-800 text-slate-200 font-semibold text-base transition flex items-center space-x-2">
+                        <i class="fa-solid fa-clipboard-check text-cyan-400"></i>
+                        <span>Langsung Kuis</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3D Interactive Canvas Container -->
+            <div class="w-full lg:w-1/2 flex flex-col items-center justify-center">
+                <div class="relative w-full max-w-md aspect-square rounded-2xl glass-panel p-2 shadow-2xl border border-cyan-500/20 overflow-hidden flex items-center justify-center">
+                    <div id="virus-3d-canvas" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
+                    <div class="absolute bottom-3 left-3 right-3 glass-card px-3 py-1.5 rounded-lg text-center text-xs text-slate-400">
+                        <i class="fa-solid fa-hand-pointer text-cyan-400 mr-1"></i> Putar virus 3D menggunakan mouse/sentuhan
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. TUJUAN PEMBELAJARAN -->
+        <section id="sec-tujuan" class="content-section hidden space-y-6">
+            <div class="text-center max-w-3xl mx-auto space-y-2">
+                <h2 class="text-3xl font-bold gradient-text">Tujuan Pembelajaran</h2>
+                <p class="text-slate-400 text-sm">Capaian pembelajaran yang akan dicapai oleh peserta didik kelas X SMAN 46 Maluku Tengah pada materi Virus.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
+                <div class="glass-card p-5 rounded-2xl border border-slate-800 hover:border-cyan-500/50 transition">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl font-bold mb-4">01</div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Pengertian & Karakteristik</h3>
+                    <p class="text-sm text-slate-300">Menjelaskan pengertian virus, sifat mikrospokis, dan karakteristik aseluler secara ilmiah.</p>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl border border-slate-800 hover:border-blue-500/50 transition">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl font-bold mb-4">02</div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Struktur Tubuh Virus</h3>
+                    <p class="text-sm text-slate-300">Mengidentifikasi bagian-bagian tubuh virus seperti Kapsid, Asam Nukleat, Envelope, dan Spike.</p>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl border border-slate-800 hover:border-purple-500/50 transition">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl font-bold mb-4">03</div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Variasi Bentuk Virus</h3>
+                    <p class="text-sm text-slate-300">Membedakan ragam morfoli virus mulai dari Heliks, Polihedral, Kompleks, hingga Bulat.</p>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl border border-slate-800 hover:border-teal-500/50 transition">
+                    <div class="w-12 h-12 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center text-xl font-bold mb-4">04</div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Mekanisme Reproduksi</h3>
+                    <p class="text-sm text-slate-300">Menganalisis dan membandingkan tahapan reproduksi virus melalui Siklus Litik dan Lisogenik.</p>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl border border-slate-800 hover:border-emerald-500/50 transition">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl font-bold mb-4">05</div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Peranan Dalam Kehidupan</h3>
+                    <p class="text-sm text-slate-300">Mengidentifikasi dampak positif (bioteknologi/vaksin) dan negatif (penyakit) dari virus.</p>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl border border-slate-800 hover:border-rose-500/50 transition">
+                    <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center text-xl font-bold mb-4">06</div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Penyakit & Pencegahan</h3>
+                    <p class="text-sm text-slate-300">Menganalisis penyakit akibat virus serta menentukan langkah vaknisasi dan pencegahan medis.</p>
+                </div>
+            </div>
+
+            <div class="flex justify-center pt-6">
+                <button onclick="navigateTo('pengantar')" class="px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition flex items-center space-x-2">
+                    <span>Lanjut Ke Pengantar</span>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- 3. PENGANTAR: APA ITU VIRUS? -->
+        <section id="sec-pengantar" class="content-section hidden space-y-8">
+            <div class="text-center max-w-3xl mx-auto space-y-2">
+                <h2 class="text-3xl font-bold gradient-text">Apa Itu Virus?</h2>
+                <p class="text-slate-400 text-sm">Memahami dasar-dasar organisme ultramikroskopis dan sifat khasnya.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div class="space-y-4">
+                    <div class="glass-card p-6 rounded-2xl space-y-3">
+                        <h3 class="text-xl font-semibold text-cyan-400 flex items-center gap-2">
+                            <i class="fa-solid fa-atom"></i> Organisme Aseluler
+                        </h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Virus **bukanlah sel**. Virus tidak memiliki sitoplasma, membran sel, organel sel, maupun kemampuan untuk melakukan metabolisme sendiri. Ukurannya sangat kecil (sekitar 20–300 nanometer), sehingga hanya bisa dilihat menggunakan **mikroskop elektron**.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl space-y-3 border-l-4 border-l-purple-500">
+                        <h3 class="text-xl font-semibold text-purple-400 flex items-center gap-2">
+                            <i class="fa-solid fa-virus-covid"></i> Parasit Intraseluler Obligat
+                        </h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Virus bersifat **parasit intraseluler obligat**, artinya virus *hanya dapat bereplikasi (bereproduksi) jika berada di dalam sel inang yang hidup*. Di luar sel hidup, virus berbentuk partikel tidak aktif yang disebut **virion** dan dapat dikristalkan seperti benda mati.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Interactive Trigger Card -->
+                <div class="glass-panel p-6 rounded-2xl space-y-6">
+                    <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-2 flex items-center justify-between">
+                        <span>Fakta Menarik Virus</span>
+                        <i class="fa-solid fa-lightbulb text-yellow-400"></i>
+                    </h3>
+
+                    <div id="fact-card" class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 min-h-[110px] flex items-center justify-center text-center">
+                        <p id="fact-text" class="text-sm text-cyan-200 italic font-medium">
+                            "Kata 'Virus' berasal dari bahasa Latin yang berarti racun atau cairan berbisa."
+                        </p>
+                    </div>
+
+                    <button onclick="nextFact()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-cyan-400 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-shuffle"></i> Klik Untuk Fakta Menarik Lainnya
+                    </button>
+
+                    <div class="bg-blue-950/40 p-4 rounded-xl border border-blue-500/20 space-y-2">
+                        <p class="text-xs text-blue-300 font-bold uppercase"><i class="fa-solid fa-circle-question mr-1"></i> Pertanyaan Pemantik:</p>
+                        <p class="text-xs text-slate-300">Mengapa virus sering dijuluki sebagai makhluk peralihan antara benda mati dan makhluk hidup?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between pt-4">
+                <button onclick="navigateTo('tujuan')" class="px-5 py-2.5 rounded-xl glass-card hover:bg-slate-800 text-sm font-medium">Kembali</button>
+                <button onclick="navigateTo('struktur')" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm">Lanjut: Struktur Virus</button>
+            </div>
+        </section>
+
+        <!-- 4. STRUKTUR DAN BENTUK VIRUS -->
+        <section id="sec-struktur" class="content-section hidden space-y-8">
+            <div class="text-center max-w-3xl mx-auto space-y-2">
+                <h2 class="text-3xl font-bold gradient-text">Struktur & Bentuk Virus</h2>
+                <p class="text-slate-400 text-sm">Klik bagian struktur virus Bakteriofag di bawah untuk mempelajari fungsinya!</p>
+            </div>
+
+            <!-- Interactive Structure Explorer -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <!-- SVG Interactive Bacteriophage Model -->
+                <div class="lg:col-span-6 glass-panel p-6 rounded-2xl flex flex-col items-center justify-center relative">
+                    <p class="text-xs font-bold text-cyan-400 mb-2">Model: Bakteriofag (Virus Kompleks)</p>
+                    
+                    <svg viewBox="0 0 400 420" class="w-full max-w-sm h-auto drop-shadow-xl">
+                        <!-- Head / Kapsid -->
+                        <polygon points="200,30 270,70 270,150 200,190 130,150 130,70" fill="rgba(14, 165, 233, 0.2)" stroke="#00F0FF" stroke-width="3" class="cursor-pointer hover:fill-cyan-500/40 transition" onclick="selectStructure('kapsid')"/>
+                        
+                        <!-- DNA / Nucleic Acid inside head -->
+                        <path d="M 170,90 Q 200,70 230,90 T 170,120 T 230,140" fill="none" stroke="#8B5CF6" stroke-width="4" stroke-dasharray="4" class="cursor-pointer hover:stroke-purple-300 transition" onclick="selectStructure('dna')"/>
+
+                        <!-- Collar / Leher -->
+                        <rect x="185" y="190" width="30" height="20" rx="3" fill="#3B82F6" class="cursor-pointer hover:fill-blue-400 transition" onclick="selectStructure('leher')"/>
+
+                        <!-- Sheath / Selubung Ekor -->
+                        <rect x="190" y="210" width="20" height="90" fill="rgba(59, 130, 246, 0.4)" stroke="#3B82F6" stroke-width="2" class="cursor-pointer hover:fill-blue-500/60 transition" onclick="selectStructure('selubung')"/>
+                        <!-- Sheath Rings -->
+                        <line x1="190" y1="225" x2="210" y2="225" stroke="#60A5FA" stroke-width="2"/>
+                        <line x1="190" y1="240" x2="210" y2="240" stroke="#60A5FA" stroke-width="2"/>
+                        <line x1="190" y1="255" x2="210" y2="255" stroke="#60A5FA" stroke-width="2"/>
+                        <line x1="190" y1="270" x2="210" y2="270" stroke="#60A5FA" stroke-width="2"/>
+                        <line x1="190" y1="285" x2="210" y2="285" stroke="#60A5FA" stroke-width="2"/>
+
+                        <!-- Base Plate / Lempeng Alas -->
+                        <polygon points="180,300 220,300 230,315 170,315" fill="#10B981" class="cursor-pointer hover:fill-emerald-400 transition" onclick="selectStructure('lempeng')"/>
+
+                        <!-- Tail Fibers / Serabut Ekor -->
+                        <path d="M 170,315 L 130,370 L 110,390" stroke="#10B981" stroke-width="3" fill="none" class="cursor-pointer hover:stroke-emerald-300 transition" onclick="selectStructure('serabut')"/>
+                        <path d="M 180,315 L 150,370 L 140,395" stroke="#10B981" stroke-width="3" fill="none" class="cursor-pointer hover:stroke-emerald-300 transition" onclick="selectStructure('serabut')"/>
+                        <path d="M 220,315 L 250,370 L 260,395" stroke="#10B981" stroke-width="3" fill="none" class="cursor-pointer hover:stroke-emerald-300 transition" onclick="selectStructure('serabut')"/>
+                        <path d="M 230,315 L 270,370 L 290,390" stroke="#10B981" stroke-width="3" fill="none" class="cursor-pointer hover:stroke-emerald-300 transition" onclick="selectStructure('serabut')"/>
+
+                        <!-- Interactive Label Pointers -->
+                        <circle cx="200" cy="110" r="5" fill="#00F0FF" class="animate-ping"/>
+                    </svg>
+
+                    <div class="mt-2 flex flex-wrap justify-center gap-2 text-xs">
+                        <button onclick="selectStructure('kapsid')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300">Kapsid</button>
+                        <button onclick="selectStructure('dna')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-purple-300">Asam Nukleat</button>
+                        <button onclick="selectStructure('leher')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-blue-300">Leher</button>
+                        <button onclick="selectStructure('selubung')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-blue-300">Selubung Ekor</button>
+                        <button onclick="selectStructure('serabut')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-emerald-300">Serabut Ekor</button>
+                    </div>
+                </div>
+
+                <!-- Explanation Box -->
+                <div class="lg:col-span-6 space-y-4">
+                    <div id="structure-detail" class="glass-panel p-6 rounded-2xl min-h-[260px] border border-cyan-500/30 flex flex-col justify-center">
+                        <h3 id="struct-title" class="text-2xl font-bold text-cyan-400 mb-2">Pilih Bagian Virus</h3>
+                        <p id="struct-desc" class="text-slate-300 text-sm leading-relaxed">
+                            Klik pada salah satu bagian gambar virus Bakteriofag di samping atau gunakan tombol navigasi di bawahnya untuk melihat deskripsi dan fungsi spesifik masing-masing bagian organel virus.
+                        </p>
+                    </div>
+
+                    <!-- Bentuk-bentuk Virus -->
+                    <div class="space-y-3">
+                        <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider">Variasi Bentuk Virus:</h4>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="glass-card p-3 rounded-xl border border-slate-800">
+                                <p class="text-xs font-bold text-cyan-400">1. Heliks (Batang)</p>
+                                <p class="text-[11px] text-slate-400">Contoh: TMV (Tobacco Mosaic Virus)</p>
+                            </div>
+                            <div class="glass-card p-3 rounded-xl border border-slate-800">
+                                <p class="text-xs font-bold text-purple-400">2. Polihedral (Icosahedral)</p>
+                                <p class="text-[11px] text-slate-400">Contoh: Adenovirus</p>
+                            </div>
+                            <div class="glass-card p-3 rounded-xl border border-slate-800">
+                                <p class="text-xs font-bold text-emerald-400">3. Bulat (Spherical)</p>
+                                <p class="text-[11px] text-slate-400">Contoh: Influenza, HIV, SARS-CoV-2</p>
+                            </div>
+                            <div class="glass-card p-3 rounded-xl border border-slate-800">
+                                <p class="text-xs font-bold text-amber-400">4. Kompleks (Bentuk T)</p>
+                                <p class="text-[11px] text-slate-400">Contoh: Bakteriofag</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between pt-4">
+                <button onclick="navigateTo('pengantar')" class="px-5 py-2.5 rounded-xl glass-card text-sm">Kembali</button>
+                <button onclick="navigateTo('reproduksi')" class="px-5 py-2.5 rounded-xl bg-cyan-500 text-slate-950 font-bold text-sm">Lanjut: Reproduksi Virus</button>
+            </div>
+        </section>
+
+        <!-- 5. REPRODUKSI VIRUS (SIMULASI ANIMASI) -->
+        <section id="sec-reproduksi" class="content-section hidden space-y-6">
+            <div class="text-center max-w-3xl mx-auto space-y-2">
+                <h2 class="text-3xl font-bold gradient-text">Simulasi Reproduksi Virus</h2>
+                <p class="text-slate-400 text-sm">Pelajari dua jalur daur hidup virus: **Siklus Litik** dan **Siklus Lisogenik**.</p>
+            </div>
+
+            <!-- Cycle Selector Tabs -->
+            <div class="flex justify-center space-x-4">
+                <button id="btn-litik" onclick="switchCycle('litik')" class="px-6 py-2.5 rounded-xl font-bold text-sm bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/20 transition">
+                    Siklus Litik (Pecah/Lisis)
+                </button>
+                <button id="btn-lisogenik" onclick="switchCycle('lisogenik')" class="px-6 py-2.5 rounded-xl font-bold text-sm bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+                    Siklus Lisogenik (Penggabungan)
+                </button>
+            </div>
+
+            <!-- Simulation Canvas Card -->
+            <div class="glass-panel p-6 rounded-2xl border border-slate-800 space-y-6">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                    <div>
+                        <span id="cycle-badge" class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-bold uppercase tracking-wider">Siklus Litik</span>
+                        <h3 id="step-title" class="text-xl font-bold text-white mt-1">Tahap 1: Adsorpsi (Penempelan)</h3>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="prevStep()" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 transition text-sm font-semibold flex items-center gap-1">
+                            <i class="fa-solid fa-chevron-left"></i> Prev
+                        </button>
+                        <span id="step-indicator" class="text-xs text-slate-400 font-mono px-3">1 / 5</span>
+                        <button onclick="nextStep()" class="p-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition text-sm font-bold flex items-center gap-1">
+                            Next <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Simulation Visual Canvas Area -->
+                <div class="w-full h-64 bg-slate-950 rounded-xl relative overflow-hidden flex items-center justify-center border border-slate-800">
+                    <canvas id="sim-canvas" class="w-full h-full"></canvas>
+                </div>
+
+                <!-- Step Explanation Text -->
+                <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800">
+                    <p id="step-description" class="text-sm text-slate-200 leading-relaxed">
+                        Virus menempel pada reseptor spesifik di permukaan membran sel bakteri menggunakan serabut ekornya.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex justify-between pt-4">
+                <button onclick="navigateTo('struktur')" class="px-5 py-2.5 rounded-xl glass-card text-sm">Kembali</button>
+                <button onclick="navigateTo('peranan')" class="px-5 py-2.5 rounded-xl bg-cyan-500 text-slate-950 font-bold text-sm">Lanjut: Peranan Virus</button>
+            </div>
+        </section>
+
+        <!-- 6. PERANAN VIRUS DALAM KEHIDUPAN -->
+        <section id="sec-peranan" class="content-section hidden space-y-6">
+            <div class="text-center max-w-3xl mx-auto space-y-2">
+                <h2 class="text-3xl font-bold gradient-text">Peranan Virus Dalam Kehidupan</h2>
+                <p class="text-slate-400 text-sm">Virus tidak hanya merugikan, tetapi juga dapat dimanfaatkan untuk kemajuan ilmu bioteknologi medis.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Merugikan -->
+                <div class="glass-panel p-6 rounded-2xl border-t-4 border-t-rose-500 space-y-4">
+                    <h3 class="text-xl font-bold text-rose-400 flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Virus Merugikan (Penyebab Penyakit)
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="glass-card p-3.5 rounded-xl">
+                            <p class="text-sm font-bold text-white">SARS-CoV-2 (COVID-19)</p>
+                            <p class="text-xs text-slate-300">Menyerang sistem pernapasan manusia, memicu gejala flu berat hingga sesak napas akut.</p>
+                        </div>
+                        <div class="glass-card p-3.5 rounded-xl">
+                            <p class="text-sm font-bold text-white">HIV (Human Immunodeficiency Virus)</p>
+                            <p class="text-xs text-slate-300">Menyerang sel limfosit T (sistem kekebalan tubuh), menyebabkan penyakit AIDS.</p>
+                        </div>
+                        <div class="glass-card p-3.5 rounded-xl">
+                            <p class="text-sm font-bold text-white">Virus Dengue</p>
+                            <p class="text-xs text-slate-300">Ditolarkan melalui gigitan nyamuk *Aedes aegypti*, menyebabkan Demam Berdarah Dengue (DBD).</p>
+                        </div>
+                        <div class="glass-card p-3.5 rounded-xl">
+                            <p class="text-sm font-bold text-white">Virus Influenza & Hepatitis B</p>
+                            <p class="text-xs text-slate-300">Influenza menyerang saluran napas atas; Hepatitis B menyerang dan merusak organ hati.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Menguntungkan -->
+                <div class="glass-panel p-6 rounded-2xl border-t-4 border-t-emerald-500 space-y-4">
+                    <h3 class="text-xl font-bold text-emerald-400 flex items-center gap-2">
+                        <i class="fa-solid fa-hand-holding-medical"></i> Pemanfaatan Virus (Menguntungkan)
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="glass-card p-3.5 rounded-xl">
+                            <p class="text-sm font-bold text-white">1. Pembuatan Vaksin</p>
+                            <p class="text-xs text-slate-300">Virus yang dilemahkan/dimatikan digunakan untuk melatih antibodi imun tubuh manusia.</p>
+                        </div>
+                        <div class="glass-card p-3.5 rounded-xl">
+                            <p class="text-sm font-bold text-white">2. Terapi Fag (Phage Therapy)</p>
+                            <p class="text-xs text-slate-300">Menggunakan bakteriofag spesifik untuk membunuh bakteri patogen yang kebal antibakteri/antibiotik.</p>
+                        </div>
+                        <div class="glass-card p-3.5 rounded-xl">
+                            <p class="text-sm font-bold text-white">3. Rekayasa Genetika & Vektor Gene</p>
+                            <p class="text-xs text-slate-300">Virus dimanfaatkan sebagai pembawa (vektor) gen tertentu dalam terapi gen medis modern.</p>
+                        </div>
+                        <div class="glass-card p-3.5 rounded-xl">
+                            <p class="text-sm font-bold text-white">4. Pengendalian Hama (Baculovirus)</p>
+                            <p class="text-xs text-slate-300">Baculovirus digunakan sebagai biopestisida alami pembasmi serangga pengganggu tanaman pertanian.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between pt-4">
+                <button onclick="navigateTo('reproduksi')" class="px-5 py-2.5 rounded-xl glass-card text-sm">Kembali</button>
+                <button onclick="navigateTo('aktivitas')" class="px-5 py-2.5 rounded-xl bg-cyan-500 text-slate-950 font-bold text-sm">Lanjut: Aktivitas Interaktif</button>
+            </div>
+        </section>
+
+        <!-- 7. AKTIVITAS INTERAKTIF -->
+        <section id="sec-aktivitas" class="content-section hidden space-y-8">
+            <div class="text-center max-w-3xl mx-auto space-y-2">
+                <h2 class="text-3xl font-bold gradient-text">Aktivitas Interaktif</h2>
+                <p class="text-slate-400 text-sm">Uji pemahaman kamu dengan permainan mini pembelajaran di bawah ini!</p>
+            </div>
+
+            <!-- Activity 1: Matching / Drag-Drop mini game -->
+            <div class="glass-panel p-6 rounded-2xl space-y-4">
+                <h3 class="text-lg font-bold text-cyan-400 flex items-center gap-2">
+                    <i class="fa-solid fa-puzzle-piece"></i> Aktivitas 1: Cocokkan Nama Penyakit & Virus Penyebabnya
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Left: Diseases -->
+                    <div class="space-y-3">
+                        <p class="text-xs font-semibold text-slate-400 uppercase">Nama Penyakit:</p>
+                        <div class="p-3 bg-slate-900 rounded-xl flex justify-between items-center text-sm font-medium">
+                            <span>1. AIDS</span>
+                            <select id="match-1" class="bg-slate-800 text-cyan-300 text-xs rounded-lg p-2 border border-slate-700 outline-none">
+                                <option value="">-- Pilih Virus --</option>
+                                <option value="hiv">HIV</option>
+                                <option value="dengue">Virus Dengue</option>
+                                <option value="flu">Influenza Virus</option>
+                                <option value="covid">SARS-CoV-2</option>
+                            </select>
+                        </div>
+                        <div class="p-3 bg-slate-900 rounded-xl flex justify-between items-center text-sm font-medium">
+                            <span>2. Demam Berdarah</span>
+                            <select id="match-2" class="bg-slate-800 text-cyan-300 text-xs rounded-lg p-2 border border-slate-700 outline-none">
+                                <option value="">-- Pilih Virus --</option>
+                                <option value="hiv">HIV</option>
+                                <option value="dengue">Virus Dengue</option>
+                                <option value="flu">Influenza Virus</option>
+                                <option value="covid">SARS-CoV-2</option>
+                            </select>
+                        </div>
+                        <div class="p-3 bg-slate-900 rounded-xl flex justify-between items-center text-sm font-medium">
+                            <span>3. COVID-19</span>
+                            <select id="match-3" class="bg-slate-800 text-cyan-300 text-xs rounded-lg p-2 border border-slate-700 outline-none">
+                                <option value="">-- Pilih Virus --</option>
+                                <option value="hiv">HIV</option>
+                                <option value="dengue">Virus Dengue</option>
+                                <option value="flu">Influenza Virus</option>
+                                <option value="covid">SARS-CoV-2</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Right: Quick True/False -->
+                    <div class="space-y-3">
+                        <p class="text-xs font-semibold text-slate-400 uppercase">Kuis Benar / Salah Mini:</p>
+                        <div class="p-3 bg-slate-900 rounded-xl space-y-2">
+                            <p class="text-xs text-slate-300">"Virus dapat diobati secara efektif dengan memberikan antibiotik."</p>
+                            <div class="flex gap-2">
+                                <button onclick="checkTF(1, false)" class="tf-btn-1 px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-200">Benar</button>
+                                <button onclick="checkTF(1, true)" class="tf-btn-1 px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-200">Salah</button>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-slate-900 rounded-xl space-y-2">
+                            <p class="text-xs text-slate-300">"Vaksinasi bertujuan memicu pembentukan antibodi spesifik tubuh."</p>
+                            <div class="flex gap-2">
+                                <button onclick="checkTF(2, true)" class="tf-btn-2 px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-200">Benar</button>
+                                <button onclick="checkTF(2, false)" class="tf-btn-2 px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-200">Salah</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-2 flex items-center justify-between">
+                    <button onclick="checkMatchingActivity()" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs">
+                        Periksa Jawaban Aktivitas
+                    </button>
+                    <span id="act-feedback" class="text-xs font-bold"></span>
+                </div>
+            </div>
+
+            <div class="flex justify-between pt-4">
+                <button onclick="navigateTo('peranan')" class="px-5 py-2.5 rounded-xl glass-card text-sm">Kembali</button>
+                <button onclick="navigateTo('kuis')" class="px-5 py-2.5 rounded-xl bg-cyan-500 text-slate-950 font-bold text-sm">Lanjut: Kuis Evaluasi</button>
+            </div>
+        </section>
+
+        <!-- 8. KUIS DAN EVALUASI -->
+        <section id="sec-kuis" class="content-section hidden space-y-6">
+            <div class="text-center max-w-3xl mx-auto space-y-2">
+                <h2 class="text-3xl font-bold gradient-text">Kuis & Evaluasi Pembelajaran</h2>
+                <p class="text-slate-400 text-sm">Jawab 15 soal pilihan ganda berikut untuk menguji pemahaman kamu secara mendalam.</p>
+            </div>
+
+            <!-- Quiz Box Container -->
+            <div id="quiz-container" class="glass-panel p-6 rounded-2xl border border-slate-800 space-y-6">
+                <!-- Header Status -->
+                <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                    <div>
+                        <span id="question-level" class="px-2.5 py-1 rounded bg-cyan-950 text-cyan-400 text-xs font-bold uppercase">Mudah</span>
+                        <span id="question-number" class="ml-2 text-sm text-slate-300 font-semibold">Soal 1 dari 15</span>
+                    </div>
+                    <div id="quiz-score-badge" class="text-xs font-mono bg-slate-800 px-3 py-1 rounded-lg text-slate-300">
+                        Skor Sementara: 0
+                    </div>
+                </div>
+
+                <!-- Question Text -->
+                <div class="space-y-2">
+                    <p id="question-text" class="text-base sm:text-lg font-semibold text-white leading-relaxed">
+                        Loading soal...
+                    </p>
+                </div>
+
+                <!-- Options A-E -->
+                <div id="options-container" class="space-y-3">
+                    <!-- Dynamic rendering of options -->
+                </div>
+
+                <!-- Discussion & Feedback Box -->
+                <div id="discussion-box" class="hidden p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+                    <div id="feedback-status" class="text-xs font-bold uppercase tracking-wider"></div>
+                    <p id="discussion-text" class="text-xs text-slate-300 leading-relaxed"></p>
+                </div>
+
+                <!-- Footer Nav -->
+                <div class="flex justify-between items-center pt-2">
+                    <button id="btn-next-question" onclick="nextQuestion()" class="hidden px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm ml-auto">
+                        Soal Berikutnya <i class="fa-solid fa-chevron-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz Result View (Hidden Initially) -->
+            <div id="quiz-result" class="hidden glass-panel p-8 rounded-2xl text-center space-y-6 border border-cyan-500/30">
+                <div class="w-20 h-20 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-4xl mx-auto border border-cyan-500/40">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <div class="space-y-2">
+                    <h3 class="text-2xl font-bold text-white">Hasil Evaluasi Pembelajaran</h3>
+                    <p class="text-slate-400 text-sm">SMA Negeri 46 Maluku Tengah - Topik Virus</p>
+                </div>
+
+                <div class="py-4">
+                    <p class="text-xs uppercase text-slate-400 font-semibold">Skor Akhir Kamu:</p>
+                    <p id="final-score" class="text-6xl font-extrabold gradient-text my-1">0</p>
+                    <p id="score-grade" class="text-sm font-medium text-cyan-300"></p>
+                </div>
+
+                <div class="flex justify-center gap-4">
+                    <button onclick="restartQuiz()" class="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-rotate-right"></i> Ulangi Kuis
+                    </button>
+                    <button onclick="navigateTo('refleksi')" class="px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm flex items-center gap-2">
+                        <span>Lanjut Ke Refleksi</span> <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. REFLEKSI PEMBELAJARAN -->
+        <section id="sec-refleksi" class="content-section hidden space-y-6">
+            <div class="text-center max-w-3xl mx-auto space-y-2">
+                <h2 class="text-3xl font-bold gradient-text">Refleksi Pembelajaran</h2>
+                <p class="text-slate-400 text-sm">Luapkan pemahaman dan kesan belajar kamu setelah menyelesaikan materi virus ini.</p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl border border-slate-800 space-y-6">
+                <div class="space-y-2">
+                    <label class="block text-sm font-bold text-cyan-400">1. Apa pengetahuan baru yang paling menarik bagi kamu setelah belajar tentang virus?</label>
+                    <textarea id="ref-1" rows="3" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:border-cyan-500 outline-none" placeholder="Tuliskan jawaban kamu di sini..."></textarea>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-sm font-bold text-cyan-400">2. Mengapa virus memerlukan sel hidup untuk dapat memperbanyak diri (bereplikasi)?</label>
+                    <textarea id="ref-2" rows="3" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:border-cyan-500 outline-none" placeholder="Tuliskan jawaban kamu di sini..."></textarea>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-sm font-bold text-cyan-400">3. Bagaimana kamu menerapkan pola hidup sehat untuk mencegah infeksi virus dalam kehidupan sehari-hari?</label>
+                    <textarea id="ref-3" rows="3" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:border-cyan-500 outline-none" placeholder="Tuliskan jawaban kamu di sini..."></textarea>
+                </div>
+
+                <button onclick="saveReflection()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 font-bold text-white shadow-lg shadow-cyan-500/20 hover:from-cyan-400 hover:to-blue-500 transition">
+                    Simpan & Selesaikan Pembelajaran
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="glass-panel border-t border-slate-800 py-4 mt-8 text-center text-xs text-slate-400">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>© 2026 Media Pembelajaran Interaktif Biologi Kelas X - <strong>SMA Negeri 46 Maluku Tengah</strong></p>
+            <p class="text-[11px] text-slate-500 mt-1">Dikembangkan untuk mendukung pembelajaran berbasis Digital Learning & Student-Centered Learning.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Global Navigation Logic
+        const sections = ['home', 'tujuan', 'pengantar', 'struktur', 'reproduksi', 'peranan', 'aktivitas', 'kuis', 'refleksi'];
+        let currentSection = 'home';
+
+        function navigateTo(secId) {
+            currentSection = secId;
+            sections.forEach(s => {
+                const el = document.getElementById(`sec-${s}`);
+                const navBtn = document.getElementById(`nav-${s}`);
+                if (el) el.classList.add('hidden');
+                if (navBtn) {
+                    navBtn.classList.remove('bg-slate-800', 'text-cyan-400');
+                    navBtn.classList.add('text-slate-300');
+                }
+            });
+
+            const activeEl = document.getElementById(`sec-${secId}`);
+            const activeNav = document.getElementById(`nav-${secId}`);
+            if (activeEl) activeEl.classList.remove('hidden');
+            if (activeNav) {
+                activeNav.classList.add('bg-slate-800', 'text-cyan-400');
+            }
+
+            // Close mobile menu if open
+            document.getElementById('mobile-menu').classList.add('hidden');
+
+            // Update progress bar
+            const idx = sections.indexOf(secId);
+            const pct = ((idx + 1) / sections.length) * 100;
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+
+            // Trigger Specific Canvas Initializations if needed
+            if (secId === 'reproduksi') {
+                renderSimulationCanvas();
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // --- 3D VIRUS VISUALIZATION (THREE.JS) ---
+        let scene, camera, renderer, virusGroup;
+
+        function init3DVirus() {
+            const container = document.getElementById('virus-3d-canvas');
+            if(!container) return;
+
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.z = 6;
+
+            renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+
+            virusGroup = new THREE.Group();
+
+            // Core Sphere (Virus Body)
+            const coreGeo = new THREE.IcosahedronGeometry(1.8, 2);
+            const coreMat = new THREE.MeshPhongMaterial({
+                color: 0x00f0ff,
+                wireframe: false,
+                flatShading: true,
+                shininess: 80
+            });
+            const core = new THREE.Mesh(coreGeo, coreMat);
+            virusGroup.add(core);
+
+            // Spikes
+            const spikeGeo = new THREE.CylinderGeometry(0.02, 0.08, 0.8, 8);
+            const spikeHeadGeo = new THREE.SphereGeometry(0.12, 8, 8);
+            const spikeMat = new THREE.MeshPhongMaterial({ color: 0x8b5cf6 });
+
+            const count = 42;
+            for(let i = 0; i < count; i++) {
+                const spike = new THREE.Group();
+                const mesh = new THREE.Mesh(spikeGeo, spikeMat);
+                mesh.position.y = 0.4;
+                const head = new THREE.Mesh(spikeHeadGeo, spikeMat);
+                head.position.y = 0.8;
+
+                spike.add(mesh);
+                spike.add(head);
+
+                // Random orientation around sphere
+                const phi = Math.acos(-1 + (2 * i) / count);
+                const theta = Math.sqrt(count * Math.PI) * phi;
+                
+                spike.rotation.x = phi;
+                spike.rotation.y = theta;
+                spike.translateY(1.7);
+
+                virusGroup.add(spike);
+            }
+
+            scene.add(virusGroup);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const pointLight = new THREE.PointLight(0x00f0ff, 1.5);
+            pointLight.position.set(10, 10, 10);
+            scene.add(pointLight);
+
+            // Mouse Drag Interaction Variables
+            let isDragging = false;
+            let previousMousePosition = { x: 0, y: 0 };
+
+            container.addEventListener('mousedown', (e) => {
+                isDragging = true;
+            });
+            container.addEventListener('mousemove', (e) => {
+                const deltaMove = {
+                    x: e.offsetX - previousMousePosition.x,
+                    y: e.offsetY - previousMousePosition.y
+                };
+
+                if (isDragging) {
+                    const deltaRotationQuaternion = new THREE.Quaternion()
+                        .setFromEuler(new THREE.Euler(
+                            deltaMove.y * (Math.PI / 180),
+                            deltaMove.x * (Math.PI / 180),
+                            0,
+                            'XYZ'
+                        ));
+                    virusGroup.quaternion.multiplyQuaternions(deltaRotationQuaternion, virusGroup.quaternion);
+                }
+                previousMousePosition = { x: e.offsetX, y: e.offsetY };
+            });
+
+            window.addEventListener('mouseup', () => { isDragging = false; });
+
+            // Touch events for mobile responsiveness
+            container.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            });
+            container.addEventListener('touchmove', (e) => {
+                if(!isDragging) return;
+                const deltaMove = {
+                    x: e.touches[0].clientX - previousMousePosition.x,
+                    y: e.touches[0].clientY - previousMousePosition.y
+                };
+                const deltaRotationQuaternion = new THREE.Quaternion()
+                    .setFromEuler(new THREE.Euler(
+                        deltaMove.y * (Math.PI / 180),
+                        deltaMove.x * (Math.PI / 180),
+                        0,
+                        'XYZ'
+                    ));
+                virusGroup.quaternion.multiplyQuaternions(deltaRotationQuaternion, virusGroup.quaternion);
+                previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            });
+            window.addEventListener('touchend', () => { isDragging = false; });
+
+            function animate() {
+                requestAnimationFrame(animate);
+                if (!isDragging) {
+                    virusGroup.rotation.y += 0.005;
+                    virusGroup.rotation.x += 0.002;
+                }
+                renderer.render(scene, camera);
+            }
+            animate();
+        }
+
+        // --- FACTS GENERATOR ---
+        const facts = [
+            "Kata 'Virus' berasal dari bahasa Latin yang berarti racun atau cairan berbisa.",
+            "Ukuran virus berkisar antara 20 hingga 300 nanometer, jauh lebih kecil dibanding sel bakteri.",
+            "Virus tidak termasuk dalam sistem klasifikasi 5 atau 6 Kerajaan Makhluk Hidup karena tidak memiliki sel (aseluler).",
+            "Satu tetes air laut dapat mengandung jutaan partikel bakteriofag alami.",
+            "Vaksin pertama kali ditemukan oleh Edward Jenner pada tahun 1796 untuk mengatasi variola/cacar air."
+        ];
+        let currentFactIdx = 0;
+
+        function nextFact() {
+            currentFactIdx = (currentFactIdx + 1) % facts.length;
+            document.getElementById('fact-text').innerText = `"${facts[currentFactIdx]}"`;
+        }
+
+        // --- STRUCTURE EXPLORER LOGIC ---
+        const structures = {
+            'kapsid': {
+                title: '1. Kapsid (Selubung Protein)',
+                desc: 'Selubung pelindung yang tersusun atas subunit protein yang disebut kapsomer. Kapsid berfungsi memberi bentuk tubuh virus dan melindungi materi genetik (DNA/RNA) dari kerusakan lingkungan luar.'
+            },
+            'dna': {
+                title: '2. Asam Nukleat (Materi Genetik)',
+                desc: 'Virus hanya mengandung salah satu jenis asam nukleat: **DNA saja** atau **RNA saja** (tidak pernah keduanya sekaligus). Berfungsi menyimpan informasi genetik untuk replikasi virus.'
+            },
+            'leher': {
+                title: '3. Leher Virus',
+                desc: 'Bagian penyambung antara kepala (kapsid) dan ekor virus. Berfungsi sebagai saluran lalu lintas penyaluran asam nukleat menuju ekor saat terjadi penetrasi.'
+            },
+            'selubung': {
+                title: '4. Selubung Ekor',
+                desc: 'Struktur berbentuk silinder yang membungkus batang ekor. Berfungsi mengontraksikan diri untuk memompa dan menyuntikkan DNA/RNA virus menembus dinding sel inang.'
+            },
+            'serabut': {
+                title: '5. Serabut Ekor & Lempeng Alas',
+                desc: 'Alat penerima reseptor spesifik pada permukaan sel inang. Lempeng alas dilengkapi jarum penusuk untuk menempel (adsorpsi) kokoh pada dinding sel bakteri.'
+            }
+        };
+
+        function selectStructure(key) {
+            const data = structures[key];
+            if(data) {
+                document.getElementById('struct-title').innerText = data.title;
+                document.getElementById('struct-desc').innerText = data.desc;
+            }
+        }
+
+        // --- VIRUS REPRODUCTION CYCLE SIMULATION ---
+        let currentCycle = 'litik';
+        let currentStepIdx = 0;
+
+        const cycleData = {
+            litik: [
+                { title: '1. Adsorpsi (Penempelan)', desc: 'Virus menempel pada reseptor spesifik membran sel inang menggunakan serabut ekornya.' },
+                { title: '2. Penetrasi (Injeksi)', desc: 'Ekor virus menginjeksikan asam nukleat (DNA/RNA) ke dalam sel inang, meninggalkan kapsid kosong di luar.' },
+                { title: '3. Sintesis (Eklifase)', desc: 'DNA virus mengontrol penuh mesin metabolisme sel inang untuk menyintesis komponen virus baru.' },
+                { title: '4. Perakitan (Asemblea)', desc: 'Komponen-komponen kapsid, ekor, dan asam nukleat dirakit menjadi partikel virus baru yang utuh.' },
+                { title: '5. Lisis (Pecah)', desc: 'Dinding sel inang hancur (lisis) dengan bantuan enzim lisozim, melepaskan ratusan partikel virus baru.' }
+            ],
+            lisogenik: [
+                { title: '1. Adsorpsi & Penetrasi', desc: 'Virus menempel dan menginjeksikan DNA-nya ke dalam sel inang.' },
+                { title: '2. Penggabungan (Profag)', desc: 'DNA virus menyisip dan bergabung dengan DNA kromosom bakteri membentuk **Profag**.' },
+                { title: '3. Pembelahan', desc: 'Ketika sel bakteri membelah, profag ikut bereplikasi sehingga setiap sel anak membawa DNA virus.' },
+                { title: '4. Induksi (Sintesis)', desc: 'Jika terkena sinar UV/zat kimia, profag memisahkan diri dan memicu masuk ke Siklus Litik.' }
+            ]
+        };
+
+        function switchCycle(type) {
+            currentCycle = type;
+            currentStepIdx = 0;
+
+            const btnLitik = document.getElementById('btn-litik');
+            const btnLiso = document.getElementById('btn-lisogenik');
+            const badge = document.getElementById('cycle-badge');
+
+            if(type === 'litik') {
+                btnLitik.className = "px-6 py-2.5 rounded-xl font-bold text-sm bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/20 transition";
+                btnLiso.className = "px-6 py-2.5 rounded-xl font-bold text-sm bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+                badge.innerText = "Siklus Litik";
+                badge.className = "px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-bold uppercase tracking-wider";
+            } else {
+                btnLiso.className = "px-6 py-2.5 rounded-xl font-bold text-sm bg-purple-500 text-slate-950 shadow-lg shadow-purple-500/20 transition";
+                btnLitik.className = "px-6 py-2.5 rounded-xl font-bold text-sm bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+                badge.innerText = "Siklus Lisogenik";
+                badge.className = "px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-bold uppercase tracking-wider";
+            }
+            updateStepView();
+        }
+
+        function updateStepView() {
+            const steps = cycleData[currentCycle];
+            const data = steps[currentStepIdx];
+
+            document.getElementById('step-title').innerText = data.title;
+            document.getElementById('step-description').innerText = data.desc;
+            document.getElementById('step-indicator').innerText = `${currentStepIdx + 1} / ${steps.length}`;
+
+            renderSimulationCanvas();
+        }
+
+        function nextStep() {
+            const steps = cycleData[currentCycle];
+            if(currentStepIdx < steps.length - 1) {
+                currentStepIdx++;
+                updateStepView();
+            }
+        }
+
+        function prevStep() {
+            if(currentStepIdx > 0) {
+                currentStepIdx--;
+                updateStepView();
+            }
+        }
+
+        function renderSimulationCanvas() {
+            const cvs = document.getElementById('sim-canvas');
+            if(!cvs) return;
+            const ctx = cvs.getContext('2d');
+
+            cvs.width = cvs.clientWidth;
+            cvs.height = cvs.clientHeight;
+
+            ctx.clearRect(0, 0, cvs.width, cvs.height);
+
+            const w = cvs.width;
+            const h = cvs.height;
+
+            // Draw Host Cell (Bakteri)
+            ctx.beginPath();
+            ctx.ellipse(w/2, h/2, 140, 70, 0, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(30, 58, 138, 0.4)";
+            ctx.strokeStyle = "#3B82F6";
+            ctx.lineWidth = 4;
+            ctx.fill();
+            ctx.stroke();
+
+            // Label Sel Inang
+            ctx.fillStyle = "#93C5FD";
+            ctx.font = "12px Poppins";
+            ctx.fillText("Sel Inang (Bakteri)", w/2 - 45, h/2 + 50);
+
+            // Cycle-specific rendering step logic
+            if(currentCycle === 'litik') {
+                if(currentStepIdx === 0) {
+                    // Virus approaching top
+                    drawVirusIcon(ctx, w/2, h/2 - 80, "#00F0FF");
+                } else if(currentStepIdx === 1) {
+                    // Injecting DNA
+                    drawVirusIcon(ctx, w/2, h/2 - 70, "#00F0FF");
+                    ctx.beginPath();
+                    ctx.moveTo(w/2, h/2 - 60);
+                    ctx.lineTo(w/2, h/2 - 10);
+                    ctx.strokeStyle = "#8B5CF6";
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+                } else if(currentStepIdx === 2) {
+                    // Synthesis inside
+                    ctx.fillStyle = "#8B5CF6";
+                    ctx.beginPath(); ctx.arc(w/2 - 30, h/2, 6, 0, Math.PI*2); ctx.fill();
+                    ctx.beginPath(); ctx.arc(w/2 + 20, h/2 - 15, 6, 0, Math.PI*2); ctx.fill();
+                    ctx.beginPath(); ctx.arc(w/2, h/2 + 15, 6, 0, Math.PI*2); ctx.fill();
+                } else if(currentStepIdx === 3) {
+                    // Assembly
+                    drawVirusIcon(ctx, w/2 - 40, h/2, "#00F0FF");
+                    drawVirusIcon(ctx, w/2 + 30, h/2 - 10, "#00F0FF");
+                } else if(currentStepIdx === 4) {
+                    // Lysis
+                    ctx.strokeStyle = "#EF4444";
+                    ctx.setLineDash([5, 5]);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                    drawVirusIcon(ctx, w/2 - 120, h/2 - 40, "#00F0FF");
+                    drawVirusIcon(ctx, w/2 + 120, h/2 + 30, "#00F0FF");
+                    drawVirusIcon(ctx, w/2, h/2 - 100, "#00F0FF");
+                }
+            } else {
+                // Lisogenik
+                if(currentStepIdx === 1) {
+                    // DNA Integration
+                    ctx.beginPath();
+                    ctx.arc(w/2, h/2, 25, 0, Math.PI*2);
+                    ctx.strokeStyle = "#C084FC";
+                    ctx.lineWidth = 4;
+                    ctx.stroke();
+                }
+            }
+        }
+
+        function drawVirusIcon(ctx, x, y, color) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(0, 0, 10, 0, Math.PI*2);
+            ctx.fill();
+            ctx.restore();
+        }
+
+        // --- ACTIVITIES & MINI-GAME LOGIC ---
+        let tfAnswer = {};
+
+        function checkTF(id, ans) {
+            tfAnswer[id] = ans;
+        }
+
+        function checkMatchingActivity() {
+            const m1 = document.getElementById('match-1').value;
+            const m2 = document.getElementById('match-2').value;
+            const m3 = document.getElementById('match-3').value;
+
+            let correct = 0;
+            if(m1 === 'hiv') correct++;
+            if(m2 === 'dengue') correct++;
+            if(m3 === 'covid') correct++;
+            if(tfAnswer[1] === true) correct++;
+            if(tfAnswer[2] === true) correct++;
+
+            const fb = document.getElementById('act-feedback');
+            if(correct >= 4) {
+                fb.className = "text-xs font-bold text-emerald-400";
+                fb.innerText = `Luar Biasa! Jawaban Benar: ${correct}/5`;
+            } else {
+                fb.className = "text-xs font-bold text-amber-400";
+                fb.innerText = `Jawaban Benar: ${correct}/5. Coba periksa kembali!`;
+            }
+        }
+
+        // --- 15 KUIS EVALUASI QUESTIONS ---
+        const quizQuestions = [
+            {
+                level: "Easy",
+                question: "1. Virus tergolong ke dalam organisme aseluler karena...",
+                options: [
+                    "A. Tidak memiliki dinding sel dan sitoplasma",
+                    "B. Memiliki inti sel sejati",
+                    "C. Dapat bereproduksi secara bebas di alam",
+                    "D. Ukurannya sama dengan sel prokariotik",
+                    "E. Mampu membelah diri menjadi dua"
+                ],
+                answer: 0,
+                discussion: "Virus disebut aseluler karena tidak memiliki kelengkapan struktur sel seperti sitoplasma, membran plasma, dan organel sel."
+            },
+            {
+                level: "Easy",
+                question: "2. Struktur luar virus yang tersusun atas subunit-subunit protein dinamakan...",
+                options: ["A. Kapsomer", "B. Kapsid", "C. Peptida", "D. Membran", "E. Selubung"],
+                answer: 1,
+                discussion: "Kapsid adalah selubung luar pelindung asam nukleat virus yang tersusun dari subunit protein (kapsomer)."
+            },
+            {
+                level: "Easy",
+                question: "3. Asam nukleat yang terkandung dalam satu jenis virus adalah...",
+                options: [
+                    "A. Campuran DNA dan RNA sekaligus",
+                    "B. DNA saja atau RNA saja",
+                    "C. Protein globular saja",
+                    "D. Lipid dan Karbohidrat",
+                    "E. Enzim metabolisme seluler"
+                ],
+                answer: 1,
+                discussion: "Materi genetik virus secara ilmiah hanya terdiri atas salah satu jenis asam nukleat: DNA saja atau RNA saja."
+            },
+            {
+                level: "Easy",
+                question: "4. Virus yang menyerang dan menginfeksi sel bakteri dinamakan...",
+                options: ["A. Ribovirus", "B. Deoksiribovirus", "C. Bakteriofag", "D. Retrovirus", "E. Adenovirus"],
+                answer: 2,
+                discussion: "Bakteriofag (fag) adalah sebutan khusus bagi jenis virus yang menginfeksi dan merusak sel bakteri."
+            },
+            {
+                level: "Easy",
+                question: "5. Bentuk virus Tobacco Mosaic Virus (TMV) adalah...",
+                options: ["A. Bulat", "B. Polihedral", "C. Kompleks", "D. Heliks / Batang", "E. Kompleks T"],
+                answer: 3,
+                discussion: "TMV memiliki bentuk heliks atau batang memanjang yang menyerang daun tembakau."
+            },
+            {
+                level: "Medium",
+                question: "6. Tahapan ketika virus menempel pada reseptor sel inang dinamakan...",
+                options: ["A. Penetrasi", "B. Eklifase", "C. Adsorpsi", "D. Lisis", "E. Asemblea"],
+                answer: 2,
+                discussion: "Adsorpsi adalah tahap awal penempelan serabut ekor virus pada dinding/membran sel inang yang cocok."
+            },
+            {
+                level: "Medium",
+                question: "7. Perbedaan mendasar antara siklus litik dan lisogenik adalah...",
+                options: [
+                    "A. Siklus litik tidak merusak sel inang",
+                    "B. Pada lisogenik, sel inang langsung hancur/lisis",
+                    "C. Pada lisogenik, DNA virus bergabung dengan DNA bakteri membentuk profag",
+                    "D. Siklus litik membutuhkan waktu lebih lambat dibanding lisogenik",
+                    "E. Lisogenik tidak membutuhkan materi genetik"
+                ],
+                answer: 2,
+                discussion: "Ciri khas siklus lisogenik adalah penggabungan DNA virus dengan kromosom inang tanpa langsung mematikan sel (profag)."
+            },
+            {
+                level: "Medium",
+                question: "8. Bagian dari virus Bakteriofag yang berfungsi menyuntikkan DNA ke sel inang yaitu...",
+                options: ["A. Kapsid", "B. Serabut Ekor", "C. Selubung Ekor", "D. Kepala", "E. Kapsomer"],
+                answer: 2,
+                discussion: "Selubung ekor mengontraksikan diri untuk mendorong batang ekor menembus sel inang saat injeksi materi genetik."
+            },
+            {
+                level: "Medium",
+                question: "9. Virus HIV merupakan jenis Retrovirus karena memiliki enzim spesifik yaitu...",
+                options: ["A. Lisozim", "B. Transkriptase Balik (Reverse Transcriptase)", "C. Polimerase", "D. Ligase", "E. Amilase"],
+                answer: 1,
+                discussion: "Retrovirus seperti HIV memiliki enzim Reverse Transcriptase untuk mengubah RNA menjadi DNA di dalam sel inang."
+            },
+            {
+                level: "Medium",
+                question: "10. Penyakit Demam Berdarah Dengue (DBD) ditularkan melalui vektor serangga...",
+                options: ["A. Anopheles", "B. Culex", "C. Aedes aegypti", "D. Lalat Tsetse", "E. Kutu busuk"],
+                answer: 2,
+                discussion: "Virus Dengue ditularkan kepada manusia melalui gigitan nyamuk *Aedes aegypti* betina."
+            },
+            {
+                level: "Hard",
+                question: "11. Pemanfaatan bakteriofag dalam dunia pengobatan infeksi bakteri yang resisten antibiotik dinamakan...",
+                options: ["A. Vaksinasi RNA", "B. Terapi Fag", "C. Immunoterapi", "D. Kemoterapi", "E. Terapi Gen In Vitro"],
+                answer: 1,
+                discussion: "Terapi Fag (Phage Therapy) memanfaatkan virus bakteriofag alami untuk membunuh target sel bakteri tertentu."
+            },
+            {
+                level: "Hard",
+                question: "12. Fenomena ketika profag dalam siklus lisogenik memisah akibat paparan radiasi UV lalu masuk ke siklus litik disebut...",
+                options: ["A. Induksi", "B. Adsorpsi", "C. Transduksi", "D. Transformasi", "E. Lisis"],
+                answer: 0,
+                discussion: "Induksi adalah peristiwa terlepasnya profag dari kromosom inang sehingga menginisiasi jalannya siklus litik."
+            },
+            {
+                level: "Hard",
+                question: "13. Vaksin mRNA (seperti Pfizer/Moderna) bekerja pencegahan infeksi dengan cara...",
+                options: ["A. Menyuntikkan virus hidup yang ganas", "B. Memberikan instruksi genetik agar sel tubuh membentuk protein spike spesifik virus", "C. Membunuh seluruh leukosit tubuh", "D. Menyuntikkan sel bakteri hidup", "E. Mengganti DNA manusia"],
+                answer: 1,
+                discussion: "Vaksin mRNA membawa materi pembawa pesan sintesis protein spike non-berbahaya untuk melatih sistem imun."
+            },
+            {
+                level: "Hard",
+                question: "14. Organ target utama yang diserang oleh Hepatitis B Virus (HBV) adalah...",
+                options: ["A. Paru-paru", "B. Ginjal", "C. Hati (Hepar)", "D. Jantung", "E. Otak"],
+                answer: 2,
+                discussion: "Hepatitis B secara spesifik menginfeksi dan merusak jaringan sel-sel hati (hepar) manusia."
+            },
+            {
+                level: "Hard",
+                question: "15. Mengapa antibiotik tidak efektif digunakan untuk mengobati flu akibat infeksi virus?",
+                options: [
+                    "A. Karena antibiotik hanya bekerja merusak struktur/metabolisme spesifik sel bakteri",
+                    "B. Karena virus ukurannya terlalu besar",
+                    "C. Karena antibiotik meningkatkan jumlah antibodi",
+                    "D. Karena virus hanya mengandung protein",
+                    "E. Karena antibiotik dapat merusak sel inang"
+                ],
+                answer: 0,
+                discussion: "Antibiotik menargetkan dinding sel/metabolisme bakteri. Virus tidak memiliki sel dan metabolisme sendiri, sehingga antibiotik tidak berguna."
+            }
+        ];
+
+        let currentQIdx = 0;
+        let score = 0;
+        let answered = false;
+
+        function renderQuestion() {
+            answered = false;
+            const q = quizQuestions[currentQIdx];
+
+            document.getElementById('question-level').innerText = q.level;
+            document.getElementById('question-number').innerText = `Soal ${currentQIdx + 1} dari ${quizQuestions.length}`;
+            document.getElementById('question-text').innerText = q.question;
+
+            const optsContainer = document.getElementById('options-container');
+            optsContainer.innerHTML = '';
+
+            document.getElementById('discussion-box').classList.add('hidden');
+            document.getElementById('btn-next-question').classList.add('hidden');
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-3.5 rounded-xl glass-card hover:bg-slate-800 border border-slate-800 text-sm font-medium transition flex items-center justify-between cursor-pointer";
+                btn.innerText = opt;
+                btn.onclick = () => selectAnswer(idx, btn);
+                optsContainer.appendChild(btn);
+            });
+        }
+
+        function selectAnswer(optIdx, element) {
+            if(answered) return;
+            answered = true;
+
+            const q = quizQuestions[currentQIdx];
+            const opts = document.getElementById('options-container').children;
+
+            if(optIdx === q.answer) {
+                score += 10;
+                element.classList.add('bg-emerald-950', 'border-emerald-500', 'text-emerald-300');
+                document.getElementById('feedback-status').innerText = "JAWABAN BENAR!";
+                document.getElementById('feedback-status').className = "text-xs font-bold uppercase tracking-wider text-emerald-400";
+            } else {
+                element.classList.add('bg-rose-950', 'border-rose-500', 'text-rose-300');
+                opts[q.answer].classList.add('bg-emerald-950', 'border-emerald-500', 'text-emerald-300');
+                document.getElementById('feedback-status').innerText = "JAWABAN KURANG TEPAT";
+                document.getElementById('feedback-status').className = "text-xs font-bold uppercase tracking-wider text-rose-400";
+            }
+
+            document.getElementById('quiz-score-badge').innerText = `Skor Sementara: ${score}`;
+            document.getElementById('discussion-text').innerText = q.discussion;
+            document.getElementById('discussion-box').classList.remove('hidden');
+            document.getElementById('btn-next-question').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            if(currentQIdx < quizQuestions.length - 1) {
+                currentQIdx++;
+                renderQuestion();
+            } else {
+                // Show Result
+                document.getElementById('quiz-container').classList.add('hidden');
+                document.getElementById('quiz-result').classList.remove('hidden');
+                
+                const finalScore = Math.round((score / 150) * 100);
+                document.getElementById('final-score').innerText = finalScore;
+
+                let grade = "";
+                if(finalScore >= 85) grade = "Sangat Baik! Anda Sangat Memahami Materi Virus.";
+                else if(finalScore >= 70) grade = "Baik! Pemahaman Materi Anda Sudah Cukup Lengkap.";
+                else grade = "Perlu Belajar Lagi. Silakan Pelajari Ulang Materi Pembelajaran.";
+
+                document.getElementById('score-grade').innerText = grade;
+            }
+        }
+
+        function restartQuiz() {
+            currentQIdx = 0;
+            score = 0;
+            document.getElementById('quiz-score-badge').innerText = `Skor Sementara: 0`;
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            renderQuestion();
+        }
+
+        // --- REFLECTION SAVE LOGIC ---
+        function saveReflection() {
+            alert("Terima kasih! Jawaban refleksi Anda telah tersimpan.");
+        }
+
+        // Window Load Initialization
+        window.onload = function() {
+            init3DVirus();
+            renderQuestion();
+            selectStructure('kapsid');
+        };
+    </script>
+</body>
+</html>
